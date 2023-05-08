@@ -1,8 +1,3 @@
-'''
-image references:
-https://unsplash.com/@othentikisra 
-'''
-
 import os, argparse, time
 
 from pyglet import app, window
@@ -32,14 +27,17 @@ class GUIApplication:
 
   def on_draw(self) -> None:
     self.window.clear()
+
     direction = self.audio_input.get_direction()
+
     self.stack.update(direction)
     self.stack.draw()
 
-  def on_key_press(self, symbol, modifier):
+  def on_key_press(self, symbol, modifier) -> None:
     if symbol == key.ESCAPE:
       self.audio_input.stop_stream()
       self.audio_input.end_stream()
+
       os._exit(0)
 
 
@@ -58,21 +56,20 @@ class TerminalApplication:
     if key == Key.esc:
       self.running = False
 
-  def _navigate(self, direction: int) -> None:
-    #down
-    if direction == -1:
-      #press and release need to be used as some listeners only listen to one of these events
-      self.keyboard.press(Key.down)
-      self.keyboard.release(Key.down)
-    #up
-    else:
-      self.keyboard.press(Key.up)
-      self.keyboard.press(Key.up)
-
   def run(self) -> None:
     while self.running:
       direction = self.audio_input.get_direction()
-      self._navigate(direction)
+
+      #down
+      if direction == -1:
+        #press and release need to be used as some listeners only listen to one of these events
+        self.keyboard.press(Key.down)
+        self.keyboard.release(Key.down)
+      #up
+      else:
+        self.keyboard.press(Key.up)
+        self.keyboard.press(Key.up)
+
       time.sleep(C.Terminal.SLEEP_TIME)
 
 
@@ -89,6 +86,7 @@ if __name__ == "__main__":
   if args.gui:
     gui_app = GUIApplication(audio_input)
     gui_app.run()
+
   else:
     t_app = TerminalApplication(audio_input)
     t_app.run()

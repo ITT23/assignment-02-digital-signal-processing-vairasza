@@ -1,5 +1,6 @@
 from pyglet.shapes import Rectangle
 from pyglet.graphics import Batch
+
 import Config as C
 
 class Stack:
@@ -9,7 +10,9 @@ class Stack:
     self.rects = []
     self.batch = Batch()
     self.pointer = C.Stack.POINTER_START
+    self._init_rects()
 
+  def _init_rects(self) -> None:
     for i in range(C.Stack.NUM_RECTS):
       rect = Rectangle(x=C.Stack.RECTS_X, y=C.Stack.RECTS_Y + i * (C.Stack.RECT_HEIGHT + C.Stack.RECTS_OFFSET), width=C.Stack.RECT_WIDTH, height=C.Stack.RECT_HEIGHT, color=C.Color.WHITE, batch=self.batch)
     
@@ -17,11 +20,12 @@ class Stack:
         rect.color = C.Color.GREEN
 
       self.rects.append(rect)
-        
+
   def _move_selection(self) -> None:
     for key, rect in enumerate(self.rects):
       if key == self.pointer:
         rect.color = C.Color.GREEN
+
       else:
         rect.color = C.Color.WHITE
 
@@ -31,8 +35,10 @@ class Stack:
     '''
     if direction == -1 and self.pointer != 0:
       self.pointer -= 1
+      
     elif direction == 1 and self.pointer != C.Stack.NUM_RECTS - 1:
       self.pointer += 1
+
     else:
       self.pointer += 0
 

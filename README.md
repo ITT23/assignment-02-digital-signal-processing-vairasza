@@ -26,6 +26,8 @@ remove unnessecary packages at last
 1. start it in terminal with `python whistle-input.py [gui]`
 2. if gui is 1, the application is rendered with a gui/pyglet and shows the rectangle stack that you can navigate through
 3. if gui is 0, the application is terminal only and uses pynput to navigate through apps
+4. Terminal application can uses whistle input to navigate: whistle up corresponds to arrow-up-key, while whistle down corresponds to arrow-down-key
+5. use ESC key to quit both applications
 
 ## References
 

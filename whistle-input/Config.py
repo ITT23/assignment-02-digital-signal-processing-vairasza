@@ -42,9 +42,10 @@ Nilsson, M., Bartunek, J. S., Nordberg, J., & Claesson, I. (2008, May). Human wh
 according to this paper, the human whistle range is from 500 to 5000 Hz
 '''
 class Frequency:
-  LOWER = 500
+  LOWER = 90 #lower boudry of 500 did not work at all. idk
   UPPER = 5000
   KERNEL_SIZE = 5
-  KERNEL_SIG = 3
-  MIN_LENGTH = 50
-  OVERSIZED = 100
+  KERNEL_SIG = 1
+  MIN_LENGTH = 4
+  WHISTLE_UP_THRESHOLD = 2
+  WHISTLE_DOWN_THRESHOLD = -2

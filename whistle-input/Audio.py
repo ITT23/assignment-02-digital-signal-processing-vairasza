@@ -28,11 +28,14 @@ class AudioInput:
 
   def __init__(self) -> None:
     self.py_audio = pyaudio.PyAudio()
+
+    self.kernel = signal.gaussian(C.Frequency.KERNEL_SIZE, C.Frequency.KERNEL_SIG)
+    self.kernel /= np.sum(self.kernel)
+
     self.devices_length = self.py_audio.get_device_count()
     self.supported_devices: list[AudioDevice] = []
     self.selected_device = None
-    self.kernel = signal.gaussian(C.Frequency.KERNEL_SIZE, C.Frequency.KERNEL_SIG)
-    self.kernel /= np.sum(self.kernel)
+    
     self.stream = None
     self.frequencies = []
 
@@ -139,18 +142,16 @@ class AudioInput:
       :return: -1 -> down; 1 -> up; 0 -> no change
     '''
     data = self._read_stream()
-    print(data)
 
-    #clear frequencies list if there is no input
-    if data < C.Frequency.LOWER and data > C.Frequency.UPPER:
+    #clear frequencies list if there is input that is off the boundries because this means that the user is currently not/no longer whistling
+    if data < C.Frequency.LOWER or data > C.Frequency.UPPER:
       self.frequencies = []
+      
+      return 0
     else:
       self.frequencies.append(data)
 
-    #reduce size if list is oversized because a elements from the start of the list are irrelevant for current calculations. only the last 2-3 seconds are really relevant. therefore hard coding this to OVERSIZED elements.
-    if len(self.frequencies) > C.Frequency.OVERSIZED:
-      self.frequencies = self.frequencies[len(self.frequencies) // 2:]
-
+    # self.frequencies must have a min length so that we analyse the trend of frequencies
     if len(self.frequencies) > C.Frequency.MIN_LENGTH:
       trend_count = {"up": 0, "down": 0, "straigth": 0}
 
@@ -164,13 +165,14 @@ class AudioInput:
           trend_count["straigth"] += 1
 
       self.frequencies = []
-      
-      #https://stackoverflow.com/a/14091645/13620136
-      trend_direction = max(trend_count, key=trend_count.get)
-      if trend_direction == "up":
+
+      #introducing whistle threshold: there must be a distinct trend direction for direction change up/down
+      #trend_direction == "up" and
+      if np.sum([trend_count["down"] * - 1, trend_count["up"]]) >= C.Frequency.WHISTLE_UP_THRESHOLD:
         return 1
       
-      elif trend_direction == "down":
+      #trend_direction == "down"
+      elif np.sum([trend_count["down"] * - 1, trend_count["up"]]) <= C.Frequency.WHISTLE_DOWN_THRESHOLD:
         return -1
       
       else:
