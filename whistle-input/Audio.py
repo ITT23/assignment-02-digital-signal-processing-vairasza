@@ -33,10 +33,12 @@ class AudioInput:
     self.kernel /= np.sum(self.kernel)
 
     self.devices_length = self.py_audio.get_device_count()
+    #contains all devices on the machine that support the configuration on top of def __init__
     self.supported_devices: list[AudioDevice] = []
     self.selected_device = None
     
     self.stream = None
+    #whistle input list
     self.frequencies = []
 
   def _check_input_devices(self) -> None:
@@ -44,6 +46,7 @@ class AudioInput:
       device = self.py_audio.get_device_info_by_index(device_index=i)
 
       try:
+        #before presenting a list of devices to the user, check if the configuration works for the device. is_format_supported raises an exception if the device does not support the config.
         if self.py_audio.is_format_supported(
           rate=self.RATE,
           input_channels=self.CHANNELS,
@@ -65,6 +68,9 @@ class AudioInput:
     return None
 
   def _get_valid_index(self) -> None:
+    '''
+      reads input from terminal that checks for correct data type and does retries
+    '''
     count = 0
     while True:
       try:
@@ -150,6 +156,8 @@ class AudioInput:
       return 0
     else:
       self.frequencies.append(data)
+
+    print(self.frequencies)
 
     # self.frequencies must have a min length so that we analyse the trend of frequencies
     if len(self.frequencies) > C.Frequency.MIN_LENGTH:

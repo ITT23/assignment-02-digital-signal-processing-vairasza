@@ -21,6 +21,10 @@ remove unnessecary packages at last
 9. the rectangles are coloured red and green after evaluating the result
 10. you get to the next level with a longer sequence after beating the current level
 
+### Known Bugs
+
+1. when leaving the game by pressing ESC, the macos sound driver the game becomes unresponsive and a different thread raises an exception (pyaudio) that can not be captured because it is in a different thread (RuntimeError: cannot join current thread). sometimes it crashes due to a segmentation fault. i dont know where the bug can be captured.
+
 ## Whistle Input
 
 1. start it in terminal with `python whistle-input.py [gui]`
@@ -28,6 +32,7 @@ remove unnessecary packages at last
 3. if gui is 0, the application is terminal only and uses pynput to navigate through apps
 4. Terminal application can uses whistle input to navigate: whistle up corresponds to arrow-up-key, while whistle down corresponds to arrow-down-key
 5. use ESC key to quit both applications
+6. the whistle analyser is pretty strict about a drop in frequency and trend variations in frequency. therefore try to whistle with a constant and clear up- or downwards trend in frequency. Otherwise the analyser rather keeps returning a 0-direction.
 
 ## References
 

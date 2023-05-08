@@ -14,8 +14,10 @@ class Stack:
 
   def _init_rects(self) -> None:
     for i in range(C.Stack.NUM_RECTS):
-      rect = Rectangle(x=C.Stack.RECTS_X, y=C.Stack.RECTS_Y + i * (C.Stack.RECT_HEIGHT + C.Stack.RECTS_OFFSET), width=C.Stack.RECT_WIDTH, height=C.Stack.RECT_HEIGHT, color=C.Color.WHITE, batch=self.batch)
+      rect_y = C.Stack.RECTS_Y + i * (C.Stack.RECT_HEIGHT + C.Stack.RECTS_OFFSET)
+      rect = Rectangle(x=C.Stack.RECTS_X, y=rect_y, width=C.Stack.RECT_WIDTH, height=C.Stack.RECT_HEIGHT, color=C.Color.WHITE, batch=self.batch)
     
+      #green coloured rectangle indicates the current position of the pointer
       if self.pointer == i:
         rect.color = C.Color.GREEN
 
@@ -33,11 +35,8 @@ class Stack:
     '''
       direction: -1 -> down; 1 -> up; 0 -> no change
     '''
-    if direction == -1 and self.pointer != 0:
-      self.pointer -= 1
-      
-    elif direction == 1 and self.pointer != C.Stack.NUM_RECTS - 1:
-      self.pointer += 1
+    if (direction == -1 and self.pointer != 0) or (direction == 1 and self.pointer != C.Stack.NUM_RECTS - 1):
+      self.pointer += direction
 
     else:
       self.pointer += 0

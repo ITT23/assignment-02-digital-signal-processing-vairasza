@@ -45,6 +45,9 @@ class TonePalette:
     self.helper_computer.visible = False
 
   def play_sound(self) -> None:
+    '''
+      corresponds to the upper row of rects. the computer plays the sounds for the player. current sounds symbolised with a rect have a helper cirlce underneath to help the player know the current index. also turns white when it is currently playing.
+    '''
     self.player.play()
     self.helper_computer.visible = True
     self.rect_computer.color = C.Color.WHITE
@@ -56,6 +59,7 @@ class TonePalette:
       return False
 
     #get mode: https://stackoverflow.com/a/46366383/13620136
+    #while the player tries to immitate the memorised sound, the current frequencies are checked for the most common frequency (mode) which is the end result for the evaluation.
     frequencies, counts = np.unique(self.current_freqs, return_counts=True)
     index = counts.argmax()
 
@@ -78,7 +82,6 @@ class TonePalette:
       self.rect_player.color = C.Color.RED
 
   def listen_to_sound(self) -> None:
-    print(f"listen {self.sound_info[0]}")
     self.current_freqs = []
     self.listening = True
     self.helper_player.visible = True

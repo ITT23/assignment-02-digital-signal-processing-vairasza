@@ -40,13 +40,14 @@ class Game:
     self._start_tones()
 
   def _init_tones(self) -> None:
+    # initialises the tonepalette object which consists of a rect, an invisible circle underneath and a sound to be played. draws the whole level at once.
     for i in range(self.max_level):
       sound_info = random.choice(C.Sound.PALETTE)
       self.tone_palette.append(TonePalette(self.audio_input, sound_info, C.Game.RECT_X + i * C.Game.RECT_X_GAP))
 
   def _start_tones(self) -> None:
+    # with each level, the number of sounds increases. starts the sounds to be played and to be listened with schedule_once.
     for i in range(self.current_index + 1):
-      print(i)
       self.tone_palette[i].evaluation_state = EvaluationState.IDLE
 
       schedule_once(lambda _: self.tone_palette[i].play_sound(), C.Game.DELAY_COMPUTER * i)
