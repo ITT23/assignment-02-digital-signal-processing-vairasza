@@ -9,6 +9,8 @@ from Menu import Menu
 from Game import Game
 import Config as C
 
+import sys
+
 """
 #https://stackoverflow.com/a/73032937/13620136 -> chunk size of 1024 lead to a constant IOError (OSError: [Errno -9981] Input overflowed) wherefore increasing it to 4096 resolved it; 2048 also works; https://stackoverflow.com/a/35442501/13620136 -> adding exception_on_overflow=False to stream.read() drops all exceptions; https://pyquestions.com/pyaudio-input-overflowed -> use callback function also resolves this issue but with this we have too much data and
 """
@@ -35,6 +37,9 @@ class Application:
 
     if self.app_state == AppState.START:
       self.audio_input.open_stream()
+      self.app_state = AppState.MENU
+
+    elif self.app_state == AppState.MENU:
       self.menu.show_intro()
 
     elif self.app_state == AppState.GAME:
@@ -46,12 +51,13 @@ class Application:
     elif self.app_state == AppState.EXIT:
       self.audio_input.stop_stream()
       self.audio_input.end_stream()
-      os._exit(0)
+      #os._exit(0)
+      sys.exit(0)
 
   def on_key_press(self, symbol, modifier):
     if symbol == key.SPACE:
       self.game.init()
-      self.audio_input.open_stream()
+      #self.audio_input.open_stream()
       self.app_state = AppState.GAME
 
     elif symbol == key.ESCAPE:

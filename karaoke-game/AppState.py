@@ -7,3 +7,4 @@ class AppState(Enum):
   GAME = 4
   END = 5
   EXIT = 6
+  MENU = 7

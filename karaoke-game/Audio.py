@@ -101,6 +101,7 @@ class AudioInput:
       )
 
   def open_stream(self) -> None:
+    print('open stream')
     self.stream = self.py_audio.open(
       format=self.FORMAT,
       channels=self.CHANNELS,

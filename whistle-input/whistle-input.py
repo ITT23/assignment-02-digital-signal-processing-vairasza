@@ -63,14 +63,18 @@ class TerminalApplication:
       #down
       if direction == -1:
         #press and release need to be used as some listeners only listen to one of these events
+        print('down')
         self.keyboard.press(Key.down)
         self.keyboard.release(Key.down)
       #up
+      elif direction == 1:
+        print('up')
+        self.keyboard.press(Key.up)
+        self.keyboard.release(Key.up)
       else:
-        self.keyboard.press(Key.up)
-        self.keyboard.press(Key.up)
+        pass
 
-      time.sleep(C.Terminal.SLEEP_TIME)
+      #time.sleep(C.Terminal.SLEEP_TIME)
 
 
 if __name__ == "__main__":

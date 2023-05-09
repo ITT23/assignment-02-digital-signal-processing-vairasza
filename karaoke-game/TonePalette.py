@@ -90,6 +90,7 @@ class TonePalette:
   def draw(self) -> None:
     if self.listening:
       self.current_freqs.append(self.audio_input.read_stream())
+      print('listening', self.audio_input.read_stream())
 
     self.rect_computer.draw()
     self.helper_computer.draw()
